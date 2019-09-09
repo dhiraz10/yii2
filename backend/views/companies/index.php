@@ -7,6 +7,7 @@ use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use backend\models\companies;
 use dosamigos\datepicker\DatePicker;
+use yii\bootstrap\Modal;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\CompaniesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -19,8 +20,17 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Companies', ['create'], ['class' => 'btn btn-success']) ?>
+        
+        <a id='modalButton', href="companies/create" class="btn btn-success">Create Companies</a>
     </p>
+    <?php Modal::begin([
+                'header'=>'<h4>Companies </h4>' ,
+                'id'=>'modal',
+                'size'=>'modal-lg',
+                 ]);
+                  echo "<div id='modalContent'></div>";
+                  Modal::end();
+            ?>
 
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -66,6 +76,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'format' => 'yyyy-m-dd'
                                     ]
             ])],
+            [
+                'attribute' => 'logo',
+                'format' => 'raw',
+                'label' => 'logo',
+                'value' => function ($data) {
+                    return Html::img(Yii::$app->request->BaseUrl.'/uploads/company_img/' . $data['logo'],
+                        ['width' => '60px']);
+                },
+            ],
+
+           
             //'company_status',
            
 
@@ -76,3 +97,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::end(); ?>
 
 </div>
+<?php
+$js = <<<JS
+  $('#modalButton').click(function (e) {
+      e.preventDefault();
+    $('#modal').modal('show')
+      .find('#modalContent')
+      .load($(this).attr('href'));
+  });
+JS;
+$this->registerJs($js);
+?>

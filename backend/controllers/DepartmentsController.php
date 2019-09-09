@@ -8,6 +8,8 @@ use backend\models\DepartmentsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
+use yii\helpers\Json;
 
 /**
  * DepartmentsController implements the CRUD actions for departments model.
@@ -37,6 +39,19 @@ class DepartmentsController extends Controller
     {
         $searchModel = new DepartmentsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if(Yii::$app->request->post('hasEditable')){
+            $departmentID =Yii::$app->request->post('editableKey');
+            $department =Departments::findOne($department_id);
+            $out =json::encode(['output'=>'','message'=>'']);
+            $post=[];
+            $posted =current($_POST['Branches']);
+            $post['Departments']=$posted;
+            if($department->load($post)){
+                $department->save();
+            }
+            echo $out;
+            return;
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -126,4 +141,47 @@ class DepartmentsController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionEditableDemo() {
+        $model = new Departments; // your model can be loaded here
+        
+        // Check if there is an Editable ajax request
+        if (Yii::$app->request->post('hasEditable')) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+  
+            $model = $this->findModel(Yii::$app->request->post('editableKey'));
+  
+            $out = [
+                'output'    => '',
+                'message'   => '',
+            ];
+  
+            // fetch the first entry in posted data (there should
+            // only be one entry anyway in this array for an
+            // editable submission)
+            // - $posted is the posted data for Model without any indexes
+            // - $post is the converted array for single model validation
+            $posted =Yii::$app->request->post();
+            $post = [
+                'Departments'=>$posted['Departments'][$posted['editableIndex']]
+            ];
+            //echo '<pre>';print_r($post);die;
+            
+            
+            if ($model->load($post)) {
+                if (!$model->save()) {
+                    $out = [
+                        'output'    => '',
+                        'message'   => $model->getFirstError(),
+                    ];
+                }
+                $out = [
+                    'output'    => $model->department_name,
+                    'message'   => '',
+                ];
+            }
+        }
+        return $out;
+    }
+
 }

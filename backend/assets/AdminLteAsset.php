@@ -57,3 +57,4 @@ class AdminLteAsset extends AssetBundle
         parent::init();
     }
 }
+

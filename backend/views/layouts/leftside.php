@@ -77,6 +77,19 @@ use yii\helpers\Url;
                             'url' => ['/po'],
                             'active' => $this->context->route == 'index',
                         ],
+
+                        [
+                            'label' => 'Photo',
+                            'icon' => 'fa fa-newspaper-o',
+                            'url' => ['/photo'],
+                            'active' => $this->context->route == 'index',
+                        ],
+                        [
+                            'label' => 'Picture',
+                            'icon' => 'fa fa-newspaper-o',
+                            'url' => ['/picture'],
+                            'active' => $this->context->route == 'index',
+                        ],
                         ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii'],],
                         ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug'],],
                     ],

@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use yii\helpers\Url;
 
 /**
  * CompaniesController implements the CRUD actions for companies model.
@@ -18,6 +19,24 @@ class CompaniesController extends Controller
     /**
      * {@inheritdoc}
      */
+    //widget ko code ho:
+    // public function actions()
+    // {
+    //     return [
+    //         'uploadPhoto' => [
+    //             'class' => 'budyaga\cropper\actions\UploadAction',
+    //             'url' => 'http://localhost:8081/projectsss/backend/uploads/company_img',
+    //             'path' => '@backend/uploads/company_img',
+    //         ]
+    //     ];
+    // }
+/**incase csrfvalidation lai disable garnu paryo vaney */
+    // public function beforeAction($action){
+    //     if($action->id=='uploadPhoto'){
+    //         $this->enableCsrfValidation = false;
+    //     }
+    //     return parent::beforeAction($action);
+    // }
     public function behaviors()
     {
         return [
@@ -68,7 +87,9 @@ class CompaniesController extends Controller
         $model = new companies();
 
         if ($model->load(Yii::$app->request->post()) ) {
-                // echo '<pre>';
+        //          echo '<pre>';
+        //   print_r($model);
+        //   die();
               $image = UploadedFile::getInstance($model, 'photo');
               $model->company_created=date('Y-m-d H:i:s');
               if(!empty($image)){
@@ -76,6 +97,7 @@ class CompaniesController extends Controller
                 $model->logo = $image_name;
                 $model->save();
                 $image->saveAS('uploads/company_img/'.$image_name);
+                
               }else{
                 $model->save();
               }  
@@ -83,8 +105,9 @@ class CompaniesController extends Controller
             return $this->redirect(['view', 'id' => $model->company_id]);
         }
 
-        return $this->render('create', [
+        return $this->renderAjax('create', [
             'model' => $model,
+          
         ]);
     }
 

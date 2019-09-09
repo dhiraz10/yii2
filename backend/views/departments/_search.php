@@ -26,7 +26,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'department_name') ?>
 
-    <?//= $form->field($model, 'department_created') ?>
+
+    <?// $form->field($model, 'department_created') ?>
 
     <?php // echo $form->field($model, 'department_status') ?>
 

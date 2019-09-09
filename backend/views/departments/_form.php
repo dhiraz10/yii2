@@ -18,7 +18,7 @@ use backend\models\companies;
    
     <?= $form->field($model, 'branches_branch_id')->dropDownList(
         ArrayHelper::map(branches::find()->all(),'branch_id','branch_name'),['prompt'=>'select branch']
-    ) ?>
+    ) ?> 
 
    
     <?= $form->field($model, 'companies_company_id')->dropDownList(

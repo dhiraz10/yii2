@@ -5,6 +5,9 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
+use backend\models\branches;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\BranchesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -47,11 +50,27 @@ $this->params['breadcrumbs'][] = $this->title;
         },
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+            // [
+            //     'attribute'=>'companies_company_id',
+            //     'value'=>'companiesCompany.company_name',
+            // ],
             [
-                'attribute'=>'companies_company_id',
+                // 'attribute'=>'company_name',
                 'value'=>'companiesCompany.company_name',
+                'format'=>'raw',
+                'filter'=>Select2::widget([
+                    'model' =>  $searchModel,
+                    'attribute'=>'companies_company_id',
+                    'name' => 'company_name',
+                   
+                    'value' => 'companiesCompany.company_name',
+                    'data' => ArrayHelper::map(branches::find()->all(),'companiesCompany.company_name','companiesCompany.company_name'),
+                    'options' => [ 'placeholder' => 'Select company ...'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ])
             ],
-
             // 'branch_id',
             // 'companiesCompany.company_name',
             'branch_name',
@@ -68,14 +87,14 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <?php
-// $js = <<<JS
-//   $('#modalButton').click(function (e) {
-//       e.preventDefault();
-//     $('#modal').modal('show')
-//       .find('#modalContent')
-//       .load($(this).attr('href'));
-//   });
-// JS;
-// $this->registerJs($js);
+$js = <<<JS
+  $('#modalButton').click(function (e) {
+      e.preventDefault();
+    $('#modal').modal('show')
+      .find('#modalContent')
+      .load($(this).attr('href'));
+  });
+JS;
+$this->registerJs($js);
 ?>
 

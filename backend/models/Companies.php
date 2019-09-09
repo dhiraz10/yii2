@@ -34,7 +34,7 @@ class Companies extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['company_name', 'company_email', 'company_address'], 'required'],
+            [['company_name', 'company_email', 'company_address','company_start_date'], 'required'],
             [['company_created'], 'safe'],
             [['logo'], 'string'],
             [['photo'],'file','extensions'=>'jpg,png,gif','skipOnEmpty' => true, 'on' => 'update-photo-upload'],

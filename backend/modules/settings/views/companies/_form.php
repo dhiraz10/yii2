@@ -42,11 +42,33 @@ use dosamigos\ckeditor\CKEditor;
         
 ]);?>
 
-    <?= $form->field($model, 'company_description')->widget(CKEditor::className(), [
-        'options' => ['rows' => 6],
-        'preset' => 'advance'
-    ])?>
+<?= $form->field($model, 'company_description')
+         ->widget(CKEditor::className(), 
+            [
+              'options' => [], 
+              'preset' => 'custom',
+              'clientOptions' => [
+                  'extraPlugins' => '',
+                  'height' => 500,
 
+                  //Here you give the action who will handle the image upload 
+                  'filebrowserUploadUrl' => '/site/ckeditor_image_upload',
+
+                  'toolbarGroups' => [
+                      ['name' => 'undo'],
+                      ['name' => 'basicstyles', 'groups' => ['basicstyles', 'cleanup']],
+                      ['name' => 'paragraph', 'groups' => ['list', 'indent', 'blocks', 'align', 'bidi' ]],
+                      ['name' => 'styles'],
+                      ['name' => 'links', 'groups' => ['links', 'insert']]
+                  ]
+
+              ]
+
+            ]) 
+
+?>
+      
+        
 
     <?= $form->field($model, 'company_status')->dropDownList(
 	  ['Active' => 'Active', 'Inactive' => 'Inactive']
